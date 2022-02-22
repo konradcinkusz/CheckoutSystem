@@ -140,9 +140,14 @@ class Checkout
         return Products.Count > startCount;
     }
 
+    bool checkoutDone = false;
     public string Total()
     {
-        _promotions.ForEach(p => p.Apply(Products));
+        if (!checkoutDone)
+        {
+            _promotions.ForEach(p => p.Apply(Products));
+            checkoutDone = true;
+        }
         return $"Total Price: {Globals.Currency}{Products.Select(x => x.Price).Sum().ToString("0.##")}";
     }
 }
