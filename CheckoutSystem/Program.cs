@@ -123,31 +123,19 @@ class Checkout
     private readonly List<Promotions> _promotions;
 
     public Checkout(List<Promotions> promotions)
+        => _promotions = promotions;
+
+    public List<Product> Products { get; private set; } = new();
+
+    public void Scan(List<Product> products)
     {
-        _promotions = promotions;
+        Products = products;
+        Products.ForEach(p => Globals.Logs.Add($"{p} succesfully added"));
     }
 
-    public List<Product> Products { get; } = new List<Product>();
-
-    public bool Scan(List<Product> products)
-    {
-        var startCount = Products.Count;
-        foreach (var product in products)
-        {
-            Products.Add(product);
-            Globals.Logs.Add($"{product} succesfully added");
-        }
-        return Products.Count > startCount;
-    }
-
-    bool checkoutDone = false;
     public string Total()
     {
-        if (!checkoutDone)
-        {
-            _promotions.ForEach(p => p.Apply(Products));
-            checkoutDone = true;
-        }
+        _promotions.ForEach(p => p.Apply(Products));
         return $"Total Price: {Globals.Currency}{Products.Select(x => x.Price).Sum().ToString("0.##")}";
     }
 }
