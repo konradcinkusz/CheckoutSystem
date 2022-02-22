@@ -1,7 +1,7 @@
 ﻿//Set this flag to true if you want to show logs
 bool enableLogs = false;
 
-List<Promotions> Promotions = new() { new BottlePriceDrop(0001, 2, (decimal)22.99), new Discount(75, 10) };
+List<Promotions> Promotions = new() { new Discount(75, 10) { Priority = 2 }, new BottlePriceDrop(0001, 2, (decimal)22.99) };
 
 ProductFactory wBottle = new(0001, "Watter Bottle", (decimal)24.95);
 ProductFactory hoodie = new(0002, "Hoodie", (decimal)65.00);
@@ -115,6 +115,8 @@ class ProductFactory
 }
 abstract class Promotions
 {
+    public int Priority { get; set; } = 1;
+    public long CreateDate { get; } = DateTime.Now.Ticks;
     public abstract void Apply(List<Product> products);
 }
 
@@ -135,7 +137,7 @@ class Checkout
 
     public string Total()
     {
-        _promotions.ForEach(p => p.Apply(Products));
+        _promotions.OrderBy(p => p.Priority).ThenBy(p => p.CreateDate).ToList().ForEach(p => p.Apply(Products));
         return $"Total Price: {Globals.Currency}{Products.Select(x => x.Price).Sum().ToString("0.##")}";
     }
 }
