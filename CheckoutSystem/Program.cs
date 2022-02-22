@@ -1,11 +1,7 @@
 ﻿//Set this flag to true if you want to show logs
 bool enableLogs = false;
 
-// Because there is no information about promotions ordering/priority business logic. I apply for promotions in order that is present in the task description.
-//task order
 List<Promotions> Promotions = new() { new BottlePriceDrop(0001, 2, (decimal)22.99), new Discount(75, 10) };
-//other order
-//List<Promotions> Promotions = new() { new Discount(75, 10), new BottlePriceDrop(0001, 2, (decimal)22.99) };
 
 ProductFactory wBottle = new(0001, "Watter Bottle", (decimal)24.95);
 ProductFactory hoodie = new(0002, "Hoodie", (decimal)65.00);
