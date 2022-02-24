@@ -59,7 +59,7 @@ record ProductFactory(decimal id, string name, decimal price)
 {
     public Product CreateProduct() => new(id, name) { Price = price };
 }
-abstract record class Promotions(int Priority = 1)
+abstract record Promotions(int Priority = 1)
 {
     public long CreateDate { get; init; } = DateTime.Now.Ticks;
     public abstract void Apply(List<Product> products);
